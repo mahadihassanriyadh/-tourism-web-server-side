@@ -19,6 +19,7 @@ async function run() {
         await client.connect();
         const database = client.db('tourism');
         const vacationPackageCollection = database.collection('vacationPackages');
+        const contactDetailsCollection = database.collection('contactUs');
 
         // GET/FIND API or GET Products API
         app.get('/vacationPackages', async (req, res) => {
@@ -26,6 +27,15 @@ async function run() {
             const products = await cursor.toArray();
             res.send(products);
         });
+
+        // POST Contact Us
+        app.post('/contactUs', async (req, res) => {
+            const contactDetails = req.body;
+            console.log('hit the post api', contactDetails)
+            const result = await contactDetailsCollection.insertOne(contactDetails);
+            console.log(result)
+            res.json(result)
+        })
     }
     finally {
         // await client.close();
