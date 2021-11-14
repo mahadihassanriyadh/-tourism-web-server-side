@@ -44,13 +44,23 @@ async function run() {
             const contactDetails = req.body;
             console.log('hit the post api', contactDetails)
             const result = await contactDetailsCollection.insertOne(contactDetails);
-            console.log(result)
-            res.json(result)
+            // console.log(result);
+            res.json(result);
+        })
+
+        // POST new package (Add new Pcakage)
+        app.post('/addNewPackage', async (req, res) => {
+            const packageDetails = req.body;
+            console.log('hit the post api', packageDetails)
+            const result = await vacationPackageCollection.insertOne(packageDetails);
+            // console.log(result);
+            res.json(result);
         })
 
         // POST Order (Place an order)
         app.post('/placeOrder', async (req, res) => {
             const orderDetails = req.body;
+            orderDetails.orderStatus = "pending" 
             console.log('hit the post api', orderDetails)
             const result = await orderDetailsCollection.insertOne(orderDetails);
             console.log(result)
