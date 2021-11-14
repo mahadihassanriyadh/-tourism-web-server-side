@@ -49,12 +49,23 @@ async function run() {
         })
 
         // GET Single Item
-        app.get('/services/:id', async (req, res) => {
+        app.get('/vacationPackage/:id', async (req, res) => {
             const id = req.params.id;
             console.log('getting specific service', id)
             const query = { _id: ObjectId(id) };
             const package = await vacationPackageCollection.findOne(query);
             res.json(package);
+        })
+
+
+        // use POST to get data by keys
+        app.post('/products/byKeys', async (req, res) => {
+            // console.log(req.body);
+            const keys = req.body;
+            // this query will find the items those have the same key as in the array "keys" above
+            const query = { key: { $in: keys } };
+            const products = await productCollection.find(query).toArray();
+            res.json(products);
         })
     }
     finally {
