@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
 const cors = require('cors');
 
@@ -20,6 +21,7 @@ async function run() {
         const database = client.db('tourism');
         const vacationPackageCollection = database.collection('vacationPackages');
         const contactDetailsCollection = database.collection('contactUs');
+        const orderDetailsCollection = database.collection('placeOrder');
 
         // GET/FIND API or GET Products API
         app.get('/vacationPackages', async (req, res) => {
@@ -35,6 +37,24 @@ async function run() {
             const result = await contactDetailsCollection.insertOne(contactDetails);
             console.log(result)
             res.json(result)
+        })
+
+        // POST Order (Place an order)
+        app.post('/placeOrder', async (req, res) => {
+            const orderDetails = req.body;
+            console.log('hit the post api', orderDetails)
+            const result = await orderDetailsCollection.insertOne(orderDetails);
+            console.log(result)
+            res.json(result)
+        })
+
+        // GET Single Item
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('getting specific service', id)
+            const query = { _id: ObjectId(id) };
+            const package = await vacationPackageCollection.findOne(query);
+            res.json(package);
         })
     }
     finally {
