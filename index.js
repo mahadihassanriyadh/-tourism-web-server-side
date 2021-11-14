@@ -59,13 +59,15 @@ async function run() {
 
 
         // use POST to get data by keys
-        app.post('/products/byKeys', async (req, res) => {
-            // console.log(req.body);
-            const keys = req.body;
+        app.post('/myOrders', async (req, res) => {
+            console.log(req.body.email);
+            const email = req.body.email;
             // this query will find the items those have the same key as in the array "keys" above
-            const query = { key: { $in: keys } };
-            const products = await productCollection.find(query).toArray();
-            res.json(products);
+            const query = { email: email };
+            console.log(query)
+            const orders = await orderDetailsCollection.find(query).toArray();
+            console.log(orders)
+            res.json(orders);
         })
     }
     finally {
