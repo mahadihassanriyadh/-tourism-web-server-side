@@ -30,6 +30,15 @@ async function run() {
             res.send(products);
         });
 
+
+        // GET/FIND API for all Orders
+        app.get('/allOrders', async (req, res) => {
+            const cursor = orderDetailsCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
+
+
         // POST Contact Us
         app.post('/contactUs', async (req, res) => {
             const contactDetails = req.body;
@@ -58,7 +67,7 @@ async function run() {
         })
 
 
-        // use POST to get data by keys
+        // use POST to get data by email for myOrders section
         app.post('/myOrders', async (req, res) => {
             console.log(req.body.email);
             const email = req.body.email;
@@ -68,6 +77,21 @@ async function run() {
             const orders = await orderDetailsCollection.find(query).toArray();
             console.log(orders)
             res.json(orders);
+        })
+
+        // DELETE API from MyOrders
+        app.delete('/myOrders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderDetailsCollection.deleteOne(query);
+            res.json(result);
+        })
+        // DELETE API from AllOrders
+        app.delete('/allOrders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderDetailsCollection.deleteOne(query);
+            res.json(result);
         })
     }
     finally {
