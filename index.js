@@ -89,6 +89,28 @@ async function run() {
             res.json(orders);
         })
 
+
+        // UPDATE API
+        app.put('/updateStatus/:id', async(req, res) => {
+            const id = req.params.id;
+            const status = req.body.status;
+            console.log(status);
+            // in some doc query is written as filter
+            const query = { _id: ObjectId(id) };
+            // upsert: true means if the updated field doesn't exit it will insert a new one
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    orderStatus: status
+                }
+            }
+            // const update = { orderStatus: status };
+            const result = await orderDetailsCollection.updateOne(query, updateDoc, options)
+            // console.log('load user with id: ', id);
+            res.json(result);
+        })
+
+
         // DELETE API from MyOrders
         app.delete('/myOrders/:id', async (req, res) => {
             const id = req.params.id;
